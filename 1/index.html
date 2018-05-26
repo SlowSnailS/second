@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style>
+	*{margin: 0;
+		padding: 0
+	}
+	a {
+	    color: #666;
+	    text-decoration: none;
+	}
+	#wrap{
+		width: 1200px;
+		margin: 50px auto;
+	}
+	.item{
+		float: left;
+		width: 224px;
+		height: 403px;
+		overflow: hidden;
+		position: relative;
+		margin-bottom: 20px;
+		margin-right: 20px;
+	}
+	.item:nth-of-type(5n+0){
+		margin-right: 0;
+	}
+	.item img{
+		width: 224px;
+		height: 340px;
+	}
+	.item-t{
+		display: block;
+		clear: both;
+	}
+	.price {
+	    display: inline-block;
+	    font-size: 16px;
+	    color: #f36;
+	    margin-right: 2px;
+	    line-height: 30px;
+	}
+	.collect {
+	    float: right;
+	    line-height: 14px;
+	    font-size: 14px;
+	    margin-top: 6px;
+	    margin-left: 3px;
+	    color: #999;
+	}
+	.icon-star {
+	    margin-right: 3px;
+	    display: inline-block;
+	    width: 13px;
+	    height: 13px;
+	    background: url(http://s2.mogucdn.com/mlcdn/c45406/170328_88giad0l4lcl61kg8ak02567ddhfd_32x30.png) center no-repeat;
+	    background-size: 100%;
+	}
+	.icon-select {
+	    display: inline-block;
+	    width: 38px;
+	    height: 20px;
+	    margin-right: 4px;
+	    background: url(http://s2.mogucdn.com/p2/170314/133753108_5996kakhb5c3kl74gjg24c2h24l48_90x42.png) no-repeat center;
+	    background-size: contain;
+	    vertical-align: sub;
+	}
+	.title {
+	    display: block;
+	    font-size: 14px;
+	    line-height: 28px;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+</style>
+</head>
+<body>
+	<div id="wrap">
+		<!-- <div class="item">
+			<a href="###" class="item-t">
+				<img src="http://s3.mogucdn.com/mlcdn/c45406/170505_2edelkgk8562e1le90aedii8ek29b_640x960.jpg"></img>
+				<span class="price">￥59</span>
+				<div class="collect">
+					<i class="icon-star"></i>
+						777
+				</div>
+				<div class="title">
+					<i class="icon-select"></i>
+					2018春季新款复古开衫双面提花宽松毛衣外套
+				</div>
+			</a>
+		</div> -->
+	</div>
+</body>
+<script src="libs/jquery-3.3.1.js"></script>
+<script>
+	//renderPage功能对象
+	function RenderPage(wrap){
+		this.wrap = $(wrap); //获取需要渲染的容器
+		this.init();
+	}
+	RenderPage.prototype = {
+		constrcutor: RenderPage,
+		init(){	//renderPage功能实现流程
+			this.getData()
+			.then(function(data){
+				this.renderPage(data);
+			}.bind(this));
+		},
+		getData(){ //使用jquery的ajax的jsonp方式获取数据
+			return $.ajax({
+				url:"http://mce.meilishuo.com/jsonp/get/3?offset=0&frame=1&trace=0&limit=10&endId=0&pid=106888&_=1526528205879",
+				dataType:"jsonp"
+			});
+		},
+		renderPage(data){ //用数据渲染页面
+			data = data.data.list;
+			var html = '';
+			for(let i = 0; i < data.length;i++){
+				var str = `<div class="item">
+								<a href="###" class="item-t" id=${data[i].item_id}>
+									<img src=${data[i].image}></img>
+									<span class="price">￥${data[i].price}</span>
+									<div class="collect">
+										<i class="icon-star"></i>
+											${data[i].itemSale}
+									</div>
+									<div class="title">
+										<i class="icon-select"></i>
+										${data[i].title}
+									</div>
+								</a>
+							</div>`;
+				html += str;
+			}
+			this.wrap.html(html);
+		}
+	}
+	new RenderPage('#wrap');
+</script>
+</html>
